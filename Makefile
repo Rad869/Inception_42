@@ -9,7 +9,7 @@ COMPOSE_FILE = ./srcs/docker-compose.yml
 all: $(NAME)
 
 $(NAME):
-	$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) up --build
+	$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) up -d --build
 
 clean:
 	$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) down
@@ -18,5 +18,19 @@ fclean: clean
 	$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) down -v --rmi all --remove-orphans
 	
 re: fclean all
+
+wordpress:
+	docker exec -ti wordpress bash
+
+
+nginx:
+	docker exec -ti nginx bash
+
+
+mariadb:
+	docker exec -ti mariadb bash
+
+logs:
+	$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) logs 
 
 .PHONY: all clean fclean re

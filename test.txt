@@ -1,0 +1,1 @@
+wp config create --dbname=mydb --dbhost=mariadb --dbuser=root --dbpass=adminPass --allow-root

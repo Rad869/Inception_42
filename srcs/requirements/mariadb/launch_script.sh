@@ -8,12 +8,12 @@ sleep 2
 # Set root password and create database/user if not initialized
 if [ ! -d "/var/lib/mysql/${MARIADB_DATABASE}" ]; then
     echo "Initializing database..."
-    mysql -u root <<-EOSQL
-        ALTER USER 'root'@'localhost' IDENTIFIED BY '${MARIADB_ROOT_PASSWORD}';
-        FLUSH PRIVILEGES;
+    mysql -u root -p"${MARIADB_ROOT_PASSWORD}"<<-EOSQL
         CREATE DATABASE IF NOT EXISTS ${MARIADB_DATABASE};
-        CREATE OR REPLACE USER '${DB_USER_NAME}'@'localhost' IDENTIFIED BY '${MARIADB_USER_PASSWORD}';;
-        GRANT ALL PRIVILEGES ON ${MARIADB_DATABASE}.* TO '${DB_USER_NAME}'@'localhost' IDENTIFIED BY '${MARIADB_USER_PASSWORD}';
+        CREATE USER IF NOT EXISTS '${DB_USER_NAME}'@'%';
+        GRANT ALL PRIVILEGES ON ${MARIADB_DATABASE}.* TO '${DB_USER_NAME}'@'%';
+        FLUSH PRIVILEGES;
+        ALTER USER 'root'@'localhost' IDENTIFIED BY '${MARIADB_ROOT_PASSWORD}';
         FLUSH PRIVILEGES;
 EOSQL
 

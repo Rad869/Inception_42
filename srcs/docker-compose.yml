@@ -7,6 +7,7 @@ services:
     restart: always
     depends_on:
       - wordpress
+      - mariadb
     env_file:
       - ".env"
     environment:
@@ -33,21 +34,35 @@ services:
       - db:/var/lib/mysql
     networks:
       - first_net
+    expose:
+      - 3306
   wordpress:
     build: ./requirements/wordpress
     container_name: wordpress
     restart: always
     env_file:
       - ".env"
+    depends_on:
+      - mariadb
     environment:
-      MARIADB_DATABASE: $MARIADB_DATABASE
-      DB_USER_NAME: $DB_USER_NAME
+      DB_NAME: $MARIADB_DATABASE
+      DB_USER: $DB_USER_NAME
+      DB_PASS: $DB_USER_PASSWORD
       MARIADB_USER_PASSWORD: $MARIADB_USER_PASSWORD
+      WP_URL: $DOMAIN_NAME
+      WP_ADMIN: $WP_ADMIN
+      WP_ADMIN_PASS: $WP_ADMIN_PASS
+      WP_ADMIN_EMAIL: $WP_ADMIN_MAIL
+      WP_USER: $WP_USER
+      WP_USER_PASS: $WP_USER_PASS
+      WP_USER_MAIL: $WP_USER_MAIL
     volumes:
       - wp:/data/www/
     networks:
       - second_net
       - first_net
+    expose:
+      - 9000
 
 
 networks:
