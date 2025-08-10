@@ -1,4 +1,42 @@
 services:
+  mariadb:
+    build: ./requirements/mariadb
+    container_name: mariadb
+    restart: always
+    env_file:
+      - ".env"
+    environment:
+      MARIADB_ROOT_PASSWORD: $MARIADB_ROOT_PASSWORD
+      MARIADB_DATABASE: $MARIADB_DATABASE
+      DB_USER_NAME: $DB_USER_NAME
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - first_net
+
+  wordpress:
+    build: ./requirements/wordpress
+    container_name: wordpress
+    restart: always
+    env_file:
+      - ".env"
+    depends_on:
+      - mariadb
+    environment:
+      DB_NAME: $MARIADB_DATABASE
+      DB_USER: $DB_USER_NAME
+      WP_URL: $DOMAIN_NAME
+      WP_ADMIN: $WP_ADMIN
+      WP_ADMIN_PASS: $WP_ADMIN_PASS
+      WP_ADMIN_EMAIL: $WP_ADMIN_MAIL
+      WP_USER: $WP_USER
+      WP_USER_PASS: $WP_USER_PASS
+      WP_USER_MAIL: $WP_USER_MAIL
+    volumes:
+      - wp:/data/www/
+    networks:
+      - second_net
+      - first_net
   nginx:
     build: ./requirements/nginx/
     container_name: nginx
@@ -16,52 +54,6 @@ services:
       - wp:/data/www
     networks:
       - second_net
-
-  mariadb:
-    build: ./requirements/mariadb
-    container_name: mariadb
-    restart: always
-    env_file:
-      - ".env"
-    environment:
-      MARIADB_ROOT_PASSWORD: $MARIADB_ROOT_PASSWORD
-      MARIADB_DATABASE: $MARIADB_DATABASE
-      DB_USER_NAME: $DB_USER_NAME
-      MARIADB_USER_PASSWORD: $MARIADB_USER_PASSWORD
-    volumes:
-      - db:/var/lib/mysql
-    networks:
-      - first_net
-    expose:
-      - 3306
-  wordpress:
-    build: ./requirements/wordpress
-    container_name: wordpress
-    restart: always
-    env_file:
-      - ".env"
-    depends_on:
-      - mariadb
-    environment:
-      DB_NAME: $MARIADB_DATABASE
-      DB_USER: $DB_USER_NAME
-      DB_PASS: $DB_USER_PASSWORD
-      MARIADB_USER_PASSWORD: $MARIADB_USER_PASSWORD
-      WP_URL: $DOMAIN_NAME
-      WP_ADMIN: $WP_ADMIN
-      WP_ADMIN_PASS: $WP_ADMIN_PASS
-      WP_ADMIN_EMAIL: $WP_ADMIN_MAIL
-      WP_USER: $WP_USER
-      WP_USER_PASS: $WP_USER_PASS
-      WP_USER_MAIL: $WP_USER_MAIL
-    volumes:
-      - wp:/data/www/
-    networks:
-      - second_net
-      - first_net
-    expose:
-      - 9000
-
 
 networks:
   first_net:

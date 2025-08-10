@@ -1,0 +1,15 @@
+## Configuration file
+
+You must define the environement variable 
+DOMAIN_NAME
+MARIADB_DATABASE
+DB_USER_NAME
+MARIADB_ROOT_PASSWORD
+WP_ADMIN
+WP_ADMIN_MAIL
+WP_ADMIN_PASS
+WP_USER
+WP_USER_PASS
+WP_USER_MAIL
+
+and make it in the same directory of the docker-compose.yml inside the file .env

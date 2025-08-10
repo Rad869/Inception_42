@@ -55,7 +55,7 @@ echo "Running WordPress setup script..."
 # Download WordPress if not already present
 if [ ! -f /data/www/rrabeari.42.fr/wp-config.php ]; then
     wp core download --allow-root
-    wp config create --path=$WP_PATH --dbname=$DB_NAME --dbuser=$DB_USER --dbpass=$DB_PASS --dbhost=mariadb --allow-root
+    wp config create --path=$WP_PATH --dbname=$DB_NAME --dbuser=$DB_USER --dbhost=mariadb --allow-root
     wp core install --path=$WP_PATH --url=$WP_URL --title="Inception" --admin_user=$WP_ADMIN --admin_password=$WP_ADMIN_PASS --admin_email=$WP_ADMIN_EMAIL --skip-email --allow-root
     wp user create $WP_USER $WP_USER_MAIL --path=$WP_PATH  --role=author --user_pass=$WP_USER_PASS --allow-root
 fi

@@ -5,6 +5,7 @@ set -e
 mysqld_safe --skip-networking &
 sleep 2
 
+
 # Set root password and create database/user if not initialized
 if [ ! -d "/var/lib/mysql/${MARIADB_DATABASE}" ]; then
     echo "Initializing database..."
