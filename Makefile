@@ -9,6 +9,7 @@ COMPOSE_FILE = ./srcs/docker-compose.yml
 all: $(NAME)
 
 $(NAME):
+	bash ./script/check_folder.sh
 	$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) up -d --build
 
 clean:
